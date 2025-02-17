@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Foglalas_fizetes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class FoglalasokFizetesekController extends Controller
 {
@@ -45,5 +47,12 @@ class FoglalasokFizetesekController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function foglalasokVetitesSzerint()
+    {
+        return Foglalas_fizetes::select('vetites', DB::raw('count(*) as foglalasok_szama'))
+                               ->groupBy('vetites')
+                               ->get();
     }
 }

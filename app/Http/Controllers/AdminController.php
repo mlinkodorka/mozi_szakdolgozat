@@ -46,4 +46,9 @@ class AdminController extends Controller
     {
         //
     }
+
+    public function adminListaABC()
+    {
+        return Admin::orderBy('teljes_nev')->get();
+    }
 }

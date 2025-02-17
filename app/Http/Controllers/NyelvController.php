@@ -46,4 +46,9 @@ class NyelvController extends Controller
     {
         //
     }
+
+    public function hasznaltNyelvek()
+    {
+        return Nyelv::whereHas('filmek')->get();
+    }
 }

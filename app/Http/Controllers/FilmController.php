@@ -46,4 +46,14 @@ class FilmController extends Controller
     {
         //
     }
+
+    public function filmekNyelvSzerint($nyelvkod)
+    {
+        return Film::where('film_nyelve', $nyelvkod)->get();
+    }
+
+    public function filmekEvSzerint($ev)
+    {
+        return Film::where('film_evszam', $ev)->get();
+    }
 }

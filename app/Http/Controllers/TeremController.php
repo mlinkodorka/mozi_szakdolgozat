@@ -46,4 +46,19 @@ class TeremController extends Controller
     {
         //
     }
+
+    public function teremReszletek($id)
+    {
+        $terem = Terem::find($id);
+        return $terem ? $terem : response()->json(['error' => 'Nincs ilyen terem'], 404);
+    }
+
+    public function szabadHelyekTeremben($id)
+    {
+        $terem = Terem::find($id);
+        if (!$terem) {
+            return response()->json(['error' => 'Nincs ilyen terem'], 404);
+        }
+        return ['terem_id' => $id, 'szabad_helyek' => $terem->szabad_helyek];
+    }
 }
