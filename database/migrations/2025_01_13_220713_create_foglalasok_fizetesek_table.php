@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('vasarlo_email');
             $table->dateTime('lejar');
             $table->boolean('fizetve_van_e');
-            $table->dateTime('kifizetes_ideje');
+            $table->dateTime('kifizetes_ideje')->nullable();
 
             $table->foreign('vetites')->references('vetites_id')->on('vetitesek')->onDelete('cascade');
             $table->timestamps();

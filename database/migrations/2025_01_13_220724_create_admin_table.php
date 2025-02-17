@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('teljes_nev');
             $table->date('szuletesi_datum');
             $table->string('email');
-            $table->integer('telefonszam');
+            $table->string('telefonszam');
 
             $table->timestamps();
         });
