@@ -5,48 +5,56 @@ namespace App\Http\Controllers;
 use App\Models\Foglalas_fizetes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Validator;
 
 class FoglalasokFizetesekController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return Foglalas_fizetes::all();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        return Foglalas_fizetes::create($request);
+        $validated = Validator::make($request->all(), [
+            'vetites' => 'required|exists:vetitesek,vetites_id',
+            'vasarlo_email' => 'required|email',
+            'lefoglalt_jegyek_szama' => 'required|integer|min:1',
+            'vasarlo_foglalt_e' => 'required|boolean',
+            'lejar' => 'required|date',
+            'fizetve_van_e' => 'required|boolean',
+            'kifizetes_ideje' => 'nullable|date',
+        ]);
+
+        if ($validated->fails()) {
+            return response()->json([
+                'message' => 'Hibás adatok',
+                'errors' => $validated->errors()
+            ], 422);
+        }
+
+        $foglalas = Foglalas_fizetes::create($validated->validated());
+
+        return response()->json($foglalas, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        return Foglalas_fizetes::findOrFail($id);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $foglalas = Foglalas_fizetes::findOrFail($id);
+        $foglalas->update($request->all());
+        return response()->json($foglalas);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        $foglalas = Foglalas_fizetes::findOrFail($id);
+        $foglalas->delete();
+        return response()->json(['message' => 'Törölve']);
     }
 
     public function foglalasokVetitesSzerint()

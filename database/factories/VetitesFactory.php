@@ -19,10 +19,8 @@ class VetitesFactory extends Factory
     public function definition(): array
     {
         $faker = fake('hu_HU');
-        $film = Film::all()->random();
         return [
-            'film_cime' => $film->film_cime,
-            'film_evszam' => $film->film_evszam,
+            'film' => Film::all()->random()->film_id,
             'terem' => Terem::all()->random()->terem_id,
             'kezdes_ideje' => $faker->dateTimeBetween('+1 day', '+1 month'),
             'publikus_e' => $faker->boolean(),

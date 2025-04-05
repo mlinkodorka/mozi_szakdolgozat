@@ -36,5 +36,8 @@ class DatabaseSeeder extends Seeder
         Vetites::factory()->count(10)->create();
 
         Foglalas_fizetes::factory()->count(20)->create();
+
+        $this->call(AdminUserSeeder::class);
+
     }
 }

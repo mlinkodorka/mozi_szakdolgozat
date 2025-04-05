@@ -9,17 +9,11 @@ use Illuminate\Support\Facades\DB;
 
 class VetitesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return Vetites::all();
-    }
+        return Vetites::with('film')->get(); 
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         return Vetites::create($request);
@@ -28,10 +22,17 @@ class VetitesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+    $vetites = Vetites::with('film')->find($id);
+
+    if (!$vetites) {
+        return response()->json(['error' => 'Vetítés nem található'], 404);
     }
+
+    return response()->json($vetites);
+    }
+
 
     /**
      * Update the specified resource in storage.
@@ -78,4 +79,5 @@ class VetitesController extends Controller
                       ->groupBy('terem')
                       ->get();
     }
+
 }

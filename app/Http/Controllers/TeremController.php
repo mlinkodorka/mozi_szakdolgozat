@@ -62,3 +62,4 @@ class TeremController extends Controller
         return ['terem_id' => $id, 'szabad_helyek' => $terem->szabad_helyek];
     }
 }
+

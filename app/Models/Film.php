@@ -10,14 +10,12 @@ class Film extends Model
     use HasFactory;
 
     protected $table='filmek';
-    public $incrementing=false;
-    protected function setKeysForSaveQuery($query)
-    {
-        $query
-            ->where('film_cime', '=', $this->getAttribute('film_cime'))
-            ->where('film_evszam', '=', $this->getAttribute('film_evszam'));
- 
-        return $query;
-    }
+    protected $primaryKey='film_id';
     protected $fillable=['film_cime', 'film_evszam', 'szinkronos-e', 'hagyományos-e', 'film_nyelve', 'film_hossza'];
+
+
+    public function vetitesek()
+    {
+        return $this->hasMany(Vetites::class, 'film', 'film_id');
+    }
 }

@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('filmek', function (Blueprint $table) {
+            $table->id('film_id');
             $table->string('film_cime');
             $table->integer('film_evszam');
             $table->boolean('szinkronos-e');
@@ -19,7 +20,6 @@ return new class extends Migration
             $table->string('film_nyelve');
             $table->integer('film_hossza');
 
-            $table->primary(['film_cime', 'film_evszam']);
             $table->foreign('film_nyelve')->references('nyelvkod')->on('nyelvek')->onDelete('cascade');
             $table->timestamps();
         });
