@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Film;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FilmController extends Controller
 {
@@ -20,7 +21,29 @@ class FilmController extends Controller
      */
     public function store(Request $request)
     {
-        return Film::create($request);
+        $request->merge([
+            'szinkronos-e' => filter_var($request->input('szinkronos-e'), FILTER_VALIDATE_BOOLEAN),
+            'hagyományos-e' => filter_var($request->input('hagyományos-e'), FILTER_VALIDATE_BOOLEAN),
+        ]);
+    
+        $validated = $request->validate([
+            'film_cime' => 'required|string|max:255',
+            'film_evszam' => 'required|integer',
+            'szinkronos-e' => 'required|boolean',
+            'hagyományos-e' => 'required|boolean',
+            'film_nyelve' => 'required|string',
+            'film_hossza' => 'required|integer',
+            'boritokep' => 'nullable|image|max:2048',
+        ]);
+    
+        if ($request->hasFile('boritokep')) {
+            $path = $request->file('boritokep')->store('boritokepek', 'public');
+            $validated['boritokep'] = $path;
+        }
+    
+        $film = Film::create($validated);
+    
+        return response()->json($film, 201);
     }
 
     /**

@@ -16,7 +16,17 @@ class VetitesController extends Controller
 
     public function store(Request $request)
     {
-        return Vetites::create($request);
+        $validated = $request->validate([
+            'film' => 'required|exists:filmek,film_id',
+            'terem' => 'required|exists:termek,terem_id',
+            'kezdes_ideje' => 'required|date',
+            'publikus_e' => 'required|boolean',
+            'jegy_ara' => 'required|integer|min:0',
+            'szabad_helyek_szama' => 'required|integer|min:0',
+            'foglalt_helyek_szama' => 'required|integer|min:0',
+        ]);
+    
+        return Vetites::create($validated);
     }
 
     /**

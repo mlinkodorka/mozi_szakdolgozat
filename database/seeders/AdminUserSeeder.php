@@ -18,7 +18,7 @@ class AdminUserSeeder extends Seeder
             ['email' => 'admin@teszt.hu'],
             [
                 'name' => 'Teszt Admin',
-                'password' => Hash::make('jelszo123'), // biztonságos hash!
+                'password' => Hash::make('jelszo123'), 
             ]
         );
     }

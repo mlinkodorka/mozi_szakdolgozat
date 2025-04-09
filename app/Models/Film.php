@@ -11,8 +11,10 @@ class Film extends Model
 
     protected $table='filmek';
     protected $primaryKey='film_id';
-    protected $fillable=['film_cime', 'film_evszam', 'szinkronos-e', 'hagyományos-e', 'film_nyelve', 'film_hossza'];
-
+    protected $fillable = [
+        'film_cime', 'film_evszam', 'szinkronos-e', 'hagyományos-e',
+        'film_nyelve', 'film_hossza', 'boritokep'
+    ];
 
     public function vetitesek()
     {
