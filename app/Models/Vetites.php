@@ -25,4 +25,8 @@ class Vetites extends Model
         return $this->belongsTo(Film::class, 'film', 'film_id');
     }
 
+    public function foglalasok()
+    {
+        return $this->hasMany(Foglalas_fizetes::class, 'vetites', 'vetites_id');
+    }
 }

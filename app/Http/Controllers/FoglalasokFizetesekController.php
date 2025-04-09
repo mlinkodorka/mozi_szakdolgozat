@@ -63,4 +63,19 @@ class FoglalasokFizetesekController extends Controller
                                ->groupBy('vetites')
                                ->get();
     }
+
+    public function fizetesVegrehajtasa($id)
+{
+    $foglalas = Foglalas_fizetes::find($id);
+    if (!$foglalas) {
+        return response()->json(['message' => 'Foglalás nem található'], 404);
+    }
+
+    $foglalas->fizetve_van_e = true;
+    $foglalas->kifizetes_ideje = now();
+    $foglalas->save();
+
+    return response()->json(['message' => 'Fizetés rögzítve', 'foglalas' => $foglalas]);
+}
+
 }
