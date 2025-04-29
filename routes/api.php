@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 
 Route::get('/nyelvek', [NyelvController::class, 'index']);
 Route::get('/filmek', [FilmController::class, 'index']);
+Route::get('/filmek/{id}', [FilmController::class, 'show']);
 Route::get('/foglalas_fizetes', [FoglalasokFizetesekController::class, 'index']);
 Route::get('/vetites', [VetitesController::class, 'index']);
 Route::get('/admin', [AdminController::class, 'index']);
@@ -44,7 +45,7 @@ Route::middleware('auth:sanctum')->post('/filmek', [FilmController::class, 'stor
 Route::middleware('auth:sanctum')->post('/vetites', [VetitesController::class, 'store']);
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('/filmek/{id}', [FilmController::class, 'destroy']);
-    Route::apiResource('filmek', FilmController::class);
+    Route::put('/filmek/{id}', [FilmController::class, 'update']);
     Route::middleware(['auth:sanctum', 'App\Http\Middleware\CheckSuperAdmin'])->post('/admin/new-user', [AdminController::class, 'createAdmin']);
     Route::post('/vetitesek/{vetites_id}/eladas', [FoglalasokFizetesekController::class, 'eladas']);
     Route::get('/foglalasok-fizetesek', [FoglalasokFizetesekController::class, 'index']);

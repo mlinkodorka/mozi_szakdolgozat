@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Film;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class FilmController extends Controller
 {
@@ -51,7 +52,13 @@ class FilmController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $film = Film::find($id);
+
+        if (!$film) {
+            return response()->json(['message' => 'Film nem található'], 404);
+        }
+
+        return response()->json($film);
     }
 
     /**
@@ -64,7 +71,7 @@ class FilmController extends Controller
         if (!$film) {
             return response()->json(['message' => 'Film nem található'], 404);
         }
-    
+
         $validated = $request->validate([
             'film_cime' => 'required|string|max:255',
             'film_evszam' => 'required|integer',
