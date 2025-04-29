@@ -26,6 +26,7 @@ class AdminFactory extends Factory
             'szuletesi_datum' => $faker->date(),
             'email' => $faker->unique()->safeEmail(),
             'telefonszam' => $faker->phoneNumber(),
+            'role' => 'admin',
         ];
     }
 }

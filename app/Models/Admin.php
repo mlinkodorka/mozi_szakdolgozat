@@ -11,7 +11,12 @@ class Admin extends Model
     protected $table='admin';
     protected $primaryKey='admin_id';
     protected $fillable = [
-        'felhasznalonev', 'jelszo_hash', 'teljes_nev', 'szuletesi_datum', 'email', 'telefonszam'
+        'felhasznalonev', 'jelszo_hash', 'teljes_nev', 'szuletesi_datum', 'email', 'telefonszam', 'role'
     ];
-        protected $hidden=['jelszo_hash'];
+    protected $hidden=['jelszo_hash'];
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'superadmin';
+    }
 }

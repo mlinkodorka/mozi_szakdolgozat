@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('szuletesi_datum');
             $table->string('email');
             $table->string('telefonszam');
+            $table->string('role')->default('admin');
 
             $table->timestamps();
         });

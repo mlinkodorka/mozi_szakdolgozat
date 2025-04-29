@@ -24,6 +24,7 @@ class AdminController extends Controller
             'szuletesi_datum' => 'required|date',
             'email' => 'required|email|unique:admin,email',
             'telefonszam' => 'nullable|string',
+            'role' => 'required|in:admin,superadmin',
         ]);
     
         $admin = Admin::create([
@@ -33,10 +34,10 @@ class AdminController extends Controller
             'szuletesi_datum' => $validated['szuletesi_datum'],
             'email' => $validated['email'],
             'telefonszam' => $validated['telefonszam'] ?? null,
+            'role' => $validated['role'],
         ]);
     
         return response()->json(['message' => 'Admin sikeresen létrehozva!', 'admin_id' => $admin->admin_id], 201);
-    
     }
 
     public function show(string $id)
@@ -80,19 +81,25 @@ class AdminController extends Controller
     }
 
     public function createAdmin(Request $request)
-{
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:8|confirmed',
-    ]);
+    {
+        if (!$request->user() || !$request->user()->isSuperAdmin()) {
+            return response()->json(['error' => 'Unauthorized - Only superadmins can create new admins'], 403);
+        }
 
-    $user = User::create([
-        'name' => $validated['name'],
-        'email' => $validated['email'],
-        'password' => bcrypt($validated['password']),
-    ]);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'role' => 'required|in:admin,superadmin',
+        ]);
 
-    return response()->json($user, 201);
-}
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => bcrypt($validated['password']),
+            'role' => $validated['role'],
+        ]);
+
+        return response()->json($user, 201);
+    }
 }
