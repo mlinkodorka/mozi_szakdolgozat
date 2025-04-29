@@ -31,10 +31,10 @@ Route::get('/vetitesek/szam/terem', [VetitesController::class, 'vetitesekSzamaTe
 
 Route::get('/vetites/{id}', [VetitesController::class, 'show']);
 Route::post('/foglalas', [FoglalasokFizetesekController::class, 'store']);
-//NEM KELL: Route::post('/admin/login', [AdminController::class, 'login']);
+
 
 Route::middleware('auth:sanctum')->group(function () {
-    // Itt lesznek a vedett routeok. 
+
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
