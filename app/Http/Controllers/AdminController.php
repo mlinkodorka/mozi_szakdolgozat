@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -16,7 +17,26 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        return Admin::create($request);
+        $validated = $request->validate([
+            'felhasznalonev' => 'required|string|unique:admin,felhasznalonev',
+            'jelszo' => 'required|string|min:6',
+            'teljes_nev' => 'required|string',
+            'szuletesi_datum' => 'required|date',
+            'email' => 'required|email|unique:admin,email',
+            'telefonszam' => 'nullable|string',
+        ]);
+    
+        $admin = Admin::create([
+            'felhasznalonev' => $validated['felhasznalonev'],
+            'jelszo_hash' => bcrypt($validated['jelszo']),
+            'teljes_nev' => $validated['teljes_nev'],
+            'szuletesi_datum' => $validated['szuletesi_datum'],
+            'email' => $validated['email'],
+            'telefonszam' => $validated['telefonszam'] ?? null,
+        ]);
+    
+        return response()->json(['message' => 'Admin sikeresen létrehozva!', 'admin_id' => $admin->admin_id], 201);
+    
     }
 
     public function show(string $id)
@@ -58,4 +78,21 @@ class AdminController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function createAdmin(Request $request)
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8|confirmed',
+    ]);
+
+    $user = User::create([
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'password' => bcrypt($validated['password']),
+    ]);
+
+    return response()->json($user, 201);
+}
 }

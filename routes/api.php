@@ -43,6 +43,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->post('/filmek', [FilmController::class, 'store']);
 Route::middleware('auth:sanctum')->post('/vetites', [VetitesController::class, 'store']);
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::delete('/filmek/{id}', [FilmController::class, 'destroy']);
+    Route::apiResource('filmek', FilmController::class);
+    Route::middleware('auth:sanctum')->post('/admin/new-user', [AdminController::class, 'createAdmin']);
+    Route::post('/vetitesek/{vetites_id}/eladas', [FoglalasokFizetesekController::class, 'eladas']);
     Route::get('/foglalasok-fizetesek', [FoglalasokFizetesekController::class, 'index']);
     Route::patch('/foglalasok-fizetesek/{id}/fizet', [FoglalasokFizetesekController::class, 'fizetesVegrehajtasa']);
 });

@@ -59,7 +59,24 @@ class FilmController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $film = Film::find($id);
+
+        if (!$film) {
+            return response()->json(['message' => 'Film nem található'], 404);
+        }
+    
+        $validated = $request->validate([
+            'film_cime' => 'required|string|max:255',
+            'film_evszam' => 'required|integer',
+            'film_hossza' => 'required|integer|min:1',
+            'szinkronos-e' => 'required|boolean',
+            'hagyományos-e' => 'required|boolean',
+            'film_nyelve' => 'required|string|exists:nyelvek,nyelvkod',
+        ]);
+    
+        $film->update($validated);
+    
+        return response()->json($film);
     }
 
     /**
@@ -67,7 +84,14 @@ class FilmController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $film = Film::find($id);
+
+        if (!$film) {
+            return response()->json(['message' => 'Film nem található'], 404);
+        }
+
+        $film->delete();
+        return response()->json(['message' => 'Film törölve sikeresen']);
     }
 
     public function filmekNyelvSzerint($nyelvkod)

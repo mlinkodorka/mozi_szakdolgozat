@@ -78,4 +78,34 @@ class FoglalasokFizetesekController extends Controller
     return response()->json(['message' => 'Fizetés rögzítve', 'foglalas' => $foglalas]);
 }
 
+public function eladas(Request $request)
+{
+    $request->validate([
+        'vetites_id' => 'required|exists:vetitesek,vetites_id',
+        'darab' => 'required|integer|min:1',
+        'vasarlo_email' => 'nullable|email'
+    ]);
+
+    $vetites = \App\Models\Vetites::findOrFail($request->vetites_id);
+
+    if ($vetites->szabad_helyek_szama < $request->darab) {
+        return response()->json(['error' => 'Nincs elég szabad hely'], 400);
+    }
+
+    $foglalas = Foglalas_fizetes::create([
+        'vetites' => $vetites->vetites_id,
+        'lefoglalt_jegyek_szama' => $request->darab,
+        'vasarlo_foglalt_e' => false,
+        'vasarlo_email' => $request->vasarlo_email ?? 'admin@mozi.hu',
+        'lejar' => now(),
+        'fizetve_van_e' => true,
+        'kifizetes_ideje' => now()
+    ]);
+
+    $vetites->increment('foglalt_helyek_szama', $request->darab);
+    $vetites->decrement('szabad_helyek_szama', $request->darab);
+
+    return response()->json(['message' => 'Jegyek eladva', 'foglalas' => $foglalas], 201);
+}
+
 }
